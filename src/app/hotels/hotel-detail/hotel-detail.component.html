@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="card" *ngIf="hotel">
+  <div class="card" *ngIf="hotel$ | async as hotel">
     <div class="card-header text-white bg-info">
       {{ hotel.hotelName | uppercase }}
     </div>
@@ -21,7 +21,7 @@
             <div class="col-md-8">
               {{
                 hotel.price
-                  | currency: "EUR":"symbol":"1.2-2":"fr"
+                  | currency: 'EUR':'symbol':'1.2-2':'fr'
                   | replaceComma
               }}
             </div>
@@ -51,6 +51,5 @@
         retour à la liste
       </button>
     </div>
-
   </div>
 </div>

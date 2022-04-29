@@ -1,11 +1,14 @@
 <div class="container">
+  <div class="alert alert-danger" *ngIf="errMsg">
+    {{ errMsg }}
+  </div>
   <h2 *ngIf="hotels && hotels.length > 0">{{ title }}</h2>
 
   <button class="btn btn-primary d-flex" (click)="toggleIsNewBadge()">
     <span class="material-icons">
-      {{ showBadge ? "visibility_off" : "visibility" }}
+      {{ showBadge ? 'visibility_off' : 'visibility' }}
     </span>
-    <span class="ml-2"> {{ showBadge ? "Cacher" : "afficher" }} nouveau </span>
+    <span class="ml-2"> {{ showBadge ? 'Cacher' : 'afficher' }} nouveau </span>
   </button>
   <hr />
   <div class="my-2">
@@ -24,7 +27,7 @@
     {{ receivedRating }}
   </div>
   <div class="row row-cols-1 row-cols-md-3">
-    <div class="col mb-4" *ngFor="let hotel of filteredHotels">
+    <div class="col mb-4" *ngFor="let hotel of (filteredHotels$ | async)">
       <div class="card">
         <img
           [src]="hotel.imageUrl"
@@ -40,7 +43,7 @@
 
           <p class="card-text">
             {{
-              hotel.price | currency: "EUR":"symbol":"1.2-2":"fr" | replaceComma
+              hotel.price | currency: 'EUR':'symbol':'1.2-2':'fr' | replaceComma
             }}
           </p>
 
@@ -74,7 +77,9 @@
             <ng-container *ngIf="showBadge">
               <span
                 class="badge badge-pill"
-                [ngClass]="i % 2 === 0 ? 'badge-info' : 'badge-success ml-2 mr-2'"
+                [ngClass]="
+                  i % 2 === 0 ? 'badge-info' : 'badge-success ml-2 mr-2'
+                "
               >
                 {{ tag }}
               </span>
