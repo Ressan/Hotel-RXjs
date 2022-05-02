@@ -4,27 +4,21 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
+
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class HotelListService {
+
   private readonly HOTEL_API_URL = 'api/hotels';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+
+  }
 
   public getHotels(): Observable<IHotel[]> {
     return this.http.get<IHotel[]>(this.HOTEL_API_URL).pipe(
-      // map(elem => elem.price * 1.5),
-      map((hotels: IHotel[]) =>
-        hotels.map(
-          (hotel) =>
-            ({
-              ...hotel,
-              price: hotel.price * 1.5,
-            } as IHotel)
-        )
-      ),
-      tap((hotels) => console.log('hotels: ', hotels)),
+      tap(hotels => console.log('hotels: ', hotels)),
       catchError(this.handleError)
     );
   }
@@ -35,30 +29,36 @@ export class HotelListService {
     if (id === 0) {
       return of(this.getDefaultHotel());
     }
-    return this.http.get<IHotel>(url).pipe(catchError(this.handleError));
+    return this.http.get<IHotel>(url).pipe(
+      catchError(this.handleError)
+    );
   }
 
   public createHotel(hotel: IHotel): Observable<IHotel> {
     hotel = {
       ...hotel,
       imageUrl: 'assets/img/hotel-room.jpg',
-      id: null,
+      id: null
     };
-    return this.http
-      .post<IHotel>(this.HOTEL_API_URL, hotel)
-      .pipe(catchError(this.handleError));
+    return this.http.post<IHotel>(this.HOTEL_API_URL, hotel).pipe(
+      catchError(this.handleError)
+    );
   }
 
   public updateHotel(hotel: IHotel): Observable<IHotel> {
     const url = `${this.HOTEL_API_URL}/${hotel.id}2222`;
 
-    return this.http.put<IHotel>(url, hotel).pipe(catchError(this.handleError));
+    return this.http.put<IHotel>(url, hotel).pipe(
+      catchError(this.handleError)
+    );
   }
 
   public deleteHotel(id: number): Observable<{}> {
     const url = `${this.HOTEL_API_URL}/${id}`;
 
-    return this.http.delete<IHotel>(url).pipe(catchError(this.handleError));
+    return this.http.delete<IHotel>(url).pipe(
+      catchError(this.handleError)
+    );
   }
 
   private getDefaultHotel(): IHotel {
@@ -68,7 +68,7 @@ export class HotelListService {
       description: null,
       price: null,
       rating: null,
-      imageUrl: null,
+      imageUrl: null
     };
   }
 
@@ -82,14 +82,16 @@ export class HotelListService {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong.
       console.error(
-        `Backend returned code ${error.status}, ` + `body was: ${error.error}`
-      );
-      errorMessage =
-        `Backend returned code ${error.status}, ` + `body was: ${error.error}`;
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
+      errorMessage = `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`;
     }
     // Return an observable with a user-facing error message.
     return throwError(
-      'Something bad happened; please try again later.' + '\n' + errorMessage
+      'Something bad happened; please try again later.' +
+      '\n' +
+      errorMessage
     );
   }
 }
