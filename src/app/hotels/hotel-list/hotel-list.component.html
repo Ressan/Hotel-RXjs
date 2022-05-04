@@ -1,4 +1,7 @@
 <div class="container">
+  <div class="alert alert-danger" *ngIf="errMsg$ | async as errMsg ">
+    {{ errMsg }}
+  </div>
   <h2 *ngIf="hotels && hotels.length > 0">{{ title }}</h2>
 
   <button class="btn btn-primary d-flex" (click)="toggleIsNewBadge()">
@@ -19,11 +22,8 @@
           type="text"
           class="form-control"
           [(ngModel)]="hotelFilter"
-          #searchInput
-          id="search-box"
-          (ngModelChange)="filterChanged($event)"
+          (ngModelChange)="filterChange($event)"
         />
-        <!-- <input type="text" class="form-control" [ngModel]="hotelFilter" (ngModelChange)="hotelFilter = $event "> -->
       </div>
     </div>
   </div>
@@ -40,7 +40,9 @@
           [alt]="hotel.hotelName"
         />
         <div class="card-body">
-          <h5 class="card-title">{{ hotel.hotelName | titlecase }}</h5>
+          <h5 class="card-title">
+            {{ hotel.hotelName | titlecase }} - {{ hotel.category }}
+          </h5>
           <p class="card-text">
             {{ hotel.description }}
           </p>

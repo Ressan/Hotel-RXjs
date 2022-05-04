@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { IHotel } from '../shared/models/hotel';
 import { HotelListService } from '../shared/services/hotel-list.service';
 
@@ -10,7 +12,7 @@ import { HotelListService } from '../shared/services/hotel-list.service';
 })
 export class HotelDetailComponent implements OnInit {
 
-  public hotel: IHotel = <IHotel>{};
+  public hotel$: Observable<IHotel> = of(<IHotel>{});
   constructor(
     private route: ActivatedRoute,
     private hotelService: HotelListService,
@@ -20,11 +22,11 @@ export class HotelDetailComponent implements OnInit {
   ngOnInit(): void {
     const id: number = +this.route.snapshot.paramMap.get('id');
 
-    this.hotelService.getHotels().subscribe((hotels: IHotel[]) => {
-      this.hotel = hotels.find(hotel => hotel.id === id);
-      console.log('hotel: ', this.hotel);
-    });
-
+    this.hotel$ = this.hotelService.getHotels()
+      .pipe(
+        map((hotels: IHotel[]) => hotels.find(hotel => hotel.id === id)),
+        tap((hotel: IHotel) => console.log(hotel))
+      );
   }
 
   public backToList(): void {
