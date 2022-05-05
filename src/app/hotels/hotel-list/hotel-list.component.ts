@@ -26,13 +26,16 @@ export class HotelListComponent implements OnInit {
   private errMsgSubject: Subject<string> = new Subject<string>();
   public errMsg$ = this.errMsgSubject.asObservable();
 
+  private a$: Observable<Number>;
+
 
   constructor(private hotelListService: HotelListService) {
 
   }
 
   ngOnInit() {
-    this.hotels$ = this.hotelListService.hotelsWithCategories$.pipe(
+
+    this.hotels$ = this. hotelListService.hotelWithAdd$.pipe(
       catchError((err) => {
         // this.errMsg = err
         this.errMsgSubject.next(err);
