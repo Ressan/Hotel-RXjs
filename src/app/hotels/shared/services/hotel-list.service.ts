@@ -27,6 +27,16 @@ export class HotelListService {
     )
   );
 
+  public a$: Promise<Number> = of(1,2,3).toPromise();
+
+  async test(){
+    try {
+      const a = await this.a$;
+      const b = from(this.a$);
+    } catch (error) {
+      console.log({error});
+    }
+  }
 
   constructor(private http: HttpClient) {
 
